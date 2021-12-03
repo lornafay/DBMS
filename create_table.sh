@@ -19,5 +19,6 @@ else # if everything is correct
 	echo "creating file.."
 	echo "adding columns.."
 	echo "$3" > "$1"/"$2"
+	echo "OK: table created"
 	exit 0
 fi

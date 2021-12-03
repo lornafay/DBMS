@@ -37,7 +37,7 @@ else
 	numfields="${#arrfields[@]}"
 
 	if [ "$numcols" -eq "$numfields" ]; then
-		echo "OK: inserting data"
+		echo "OK: data inserted"
 		echo "$3">>"$file" # append target file with data in third parameter
 		exit 0
 	else

@@ -10,7 +10,7 @@ elif [ -d "$1" ]; then # if database exists
 	echo "Error: $1 is a database that already exists"
 	exit 12
 else
-	echo "$1 created"
+	echo "OK: database created"
 	mkdir "$1"
 	exit 0
 fi
