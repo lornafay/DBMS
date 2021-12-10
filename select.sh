@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # program to select and display data from existing table and DB
-# takes arguments $database $table which must
+# takes arguments $database $table which must exist
 # optional third argument #columns supplied as tuple of column numbers
 # otherwise all data displayed
 
