@@ -27,13 +27,15 @@ else
 	# find number of columns in table
 	file="$1"/"$2"
 	columns=$( head -n 1 "$file" ) # assign first line of file to variable columns
-	arrcolumns=("${columns//,/ }") # create array from columns, replacing all instances of comma , with a space
+	columns2="${columns//,/ }"
+	arrcolumns=("$columns2") # create array from columns, replacing all instances of comma , with a space
 	numcols="${#arrcolumns[@]}" # number of elements of columns array assigned to variable numcols
 
 	# we then perform the same operation on the data to be inserted
 
 	data="$3"
-	arrfields=("${data//,/ }")
+	data2="${data//,/ }"
+	arrfields=("$data2")
 	numfields="${#arrfields[@]}"
 
 	if [ "$numcols" -eq "$numfields" ]; then
