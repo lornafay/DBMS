@@ -28,15 +28,17 @@ else
 	file="$1"/"$2"
 	columns=$( head -n 1 "$file" ) # assign first line of file to variable columns
 	columns2="${columns//,/ }"
-	arrcolumns=("$columns2") # create array from columns, replacing all instances of comma , with a space
+	arrcolumns=($columns2) # create array from columns, replacing all instances of comma , with a space
 	numcols="${#arrcolumns[@]}" # number of elements of columns array assigned to variable numcols
-
+	echo "$numcols"
 	# we then perform the same operation on the data to be inserted
 
 	data="$3"
 	data2="${data//,/ }"
-	arrfields=("$data2")
+	arrfields=($data2)
 	numfields="${#arrfields[@]}"
+	echo "$numfields"
+
 
 	if [ "$numcols" -eq "$numfields" ]; then
 		echo "OK: data inserted"
