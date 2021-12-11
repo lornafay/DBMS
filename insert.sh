@@ -33,7 +33,7 @@ else
 	# we then perform the same operation on the data to be inserted
 
 	data="$3"
-	arrfields="${data//,/ }"
+	arrfields=("${data//,/ }")
 	numfields="${#arrfields[@]}"
 
 	if [ "$numcols" -eq "$numfields" ]; then
