@@ -16,9 +16,7 @@ elif [ -e "$1"/"$2" ]; then # if file already exists in specified database
 	exit 26
 
 else # if everything is correct
-	echo "creating file.."
-	echo "adding columns.."
-	echo "$3" > "$1"/"$2"
 	echo "OK: table created"
+	echo "$3" > "$1"/"$2"
 	exit 0
 fi

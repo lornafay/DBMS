@@ -14,43 +14,72 @@ function ctrl_c() {
 mkfifo server.pipe
 
 while true; do
-	# take reading from server pipe incase client uses shutdown command
-	read input < server.pipe
-	# store input in an array
-	read -a array
 
-	# first element of array is command we want, subsequent elements are parameters
-	case "${array[0]}" in
+	# read input from server pipe and store in array
+	read -a array < server.pipe
 
-		create_database)
-			eval ./create_database.sh "${array[1]}" &
-			exit 0
-			;;
+	if [ "${#array[@]}" -gt 1 ]; then
 
-		create_table)
-			eval ./create_table.sh "${array[1]}" "${array[2]}" "${array[3]}" &
-			exit 0
-			;;
+		idArr=("${array[0]}") # this slice contains the user id
+		id="${idArr[*]}"
+		reqArr=("${array[1]}") # this slice contains the request
+		req="${reqArr[*]}"
+		argsArr=("${array[@]:2}") # this slice contains the arguments
+		args="${argsArr[*]}"
+		# first element of array is command we want, subsequent elements are parameters
 
-		insert)
-			eval ./insert.sh "${array[1]}" "${array[2]}" "${array[3]}" &
-			exit 0
-			;;
+		case "$req" in
 
-		select)
-			eval ./select.sh "${array[1]}" "${array[2]}" "${array[3]}" &
-			exit 0
-			;;
+			create_database)
+				./P.sh "$args"
+				echo "$(./create_database.sh $args)" > "$id".pipe
+				./V.sh "$args"
+				;;
 
-		shutdown)
-			# kill the process if shutdown is input by user
-			kill $! &
-			exit 0
-			;;
+			create_table)
+				 ./P.sh "$args"
+				echo "$(./create_table.sh $args)" > "$id".pipe
+				./V.sh "$args"
+				;;
 
-		*)
-			echo "Error: bad request"
-			exit 1
+			insert)
+				./P.sh "$args"
+				echo "$(./insert.sh $args)" > "$id".pipe
+				./V.sh "$args"
+				;;
 
-	esac
+			select)
+				./P.sh "$args"
+				echo "$(./select.sh $args)" > "$id".pipe
+				./V.sh "$args"
+				;;
+
+			replace)
+				./P.sh "$args"
+				echo "$(./replace.sh $args)" > "$id".pipe
+				./V.sh "$args"
+				;;
+
+			*)
+				echo "Error: bad request" > "$id".pipe
+				exit 1
+
+		esac
+
+	elif [ "${#array[@]}" -eq 1 ]; then
+
+		case "${array[0]}" in
+
+			shutdown)
+				# kill the process and delete pipe if shutdown is input by user
+				echo "shutting down server.." > "$id".pipe
+				ctrl_c
+				;;
+
+			*)
+				echo "Error: bad request" > "$id".pipe
+				exit 1
+
+		esac
+	fi
 done
